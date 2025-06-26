@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankX - Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #2d3e50;
+            --secondary-color: #f4f7f9;
+            --accent-color: #4caf50;
+            --text-color: #333;
+            --light-blue: #a9c0d9;
+            --font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-stack);
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .dashboard {
+            padding: 2rem;
+        }
+
+        .welcome {
+            background-color: var(--light-blue);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .account-info, .transactions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .transaction-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>BankX</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <div class="dashboard">
+        <div class="welcome">
+            <h2>Welcome back, Sarah!</h2>
+            <p>Here is a quick overview of your account.</p>
+        </div>
+
+        <div class="account-info">
+            <div class="card">
+                <h3>Account Balance</h3>
+                <p><strong>Checking:</strong> $3,240.55</p>
+                <p><strong>Savings:</strong> $7,850.90</p>
+            </div>
+        </div>
+
+        <div class="transactions">
+            <div class="card">
+                <h3>Recent Transactions</h3>
+                <ul class="transaction-list">
+                    <li><span>Transfer to Mike</span><span>- $200.00</span></li>
+                    <li><span>Amazon Purchase</span><span>- $89.99</span></li>
+                    <li><span>Salary Deposit</span><span>+ $1,800.00</span></li>
+                    <li><span>Electric Bill</span><span>- $120.00</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="#" class="action-btn">Transfer Money</a>
+            <a href="#" class="action-btn">Pay Bills</a>
+            <a href="#" class="action-btn">Apply for Loan</a>
+            <a href="#" class="action-btn">Contact Support</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 BankX. All rights reserved.
+    </footer>
+
+</body>
+</html>
