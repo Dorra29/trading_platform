@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulation | TradeTuniZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-950 text-white font-sans">
+
+  <header class="p-6 bg-gradient-to-r from-indigo-900 via-purple-700 to-pink-500 flex justify-between items-center">
+    <h1 class="text-3xl font-bold">📈 Trade Simulator</h1>
+    <a href="{% url 'dashboard' %}" class="text-sm bg-gray-800 px-4 py-2 rounded-lg hover:bg-pink-600">← Back to Dashboard</a>
+  </header>
+
+  <main class="p-8 max-w-7xl mx-auto space-y-10">
+    <!-- Simulate Trade -->
+    <div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-pink-400">💸 Make a Virtual Trade</h2>
+      <form method="post" action="{% url 'simulate_trade' %}" class="grid md:grid-cols-4 gap-4">
+        {% csrf_token %}
+        <input type="text" name="asset" placeholder="Asset (e.g. BTC)" required class="p-2 rounded-lg text-black">
+        <select name="side" class="p-2 rounded-lg text-black">
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+        </select>
+        <input type="number" name="amount" placeholder="Amount" step="any" required class="p-2 rounded-lg text-black">
+        <button type="submit" class="bg-gradient-to-r from-pink-500 to-indigo-600 text-white font-bold rounded-lg px-4 py-2 hover:scale-105 transition">Simulate</button>
+      </form>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-blue-400">📊 Asset Price Movement</h2>
+      <canvas id="priceChart" height="100"></canvas>
+    </div>
+
+    <!-- News Section -->
+    <div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-fuchsia-400">📰 Real-Time News</h2>
+      <ul class="space-y-3 text-sm text-gray-300">
+        <li>🔹 <strong>BTC</strong> hits new high amid ETF rumors 🚀</li>
+        <li>🔹 <strong>TSLA</strong> sees spike after earnings call 🔋</li>
+        <li>🔹 Fed rate expectations impact USD trades 💵</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="text-xs text-pink-300 text-center py-4 animate-pulse">© 2025 TradeTuniZ — Rule the charts 🦅</footer>
+
+  <script>
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['10:00', '10:05', '10:10', '10:15', '10:20'],
+        datasets: [{
+          label: 'BTC Price (USD)',
+          data: [29200, 29550, 29300, 29800, 30000],
+          borderColor: '#ec4899',
+          backgroundColor: 'rgba(236, 72, 153, 0.2)',
+          tension: 0.4,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { ticks: { color: '#ccc' } },
+          y: { ticks: { color: '#ccc' } }
+        },
+        plugins: {
+          legend: { labels: { color: '#ccc' } }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
