@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chatbot | TradeTuniZ</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-6">
+  <h1 class="text-2xl font-bold mb-6">🤖 TradeBot AI Assistant</h1>
+
+  <div id="chat-box" class="w-full max-w-lg bg-gray-800 p-4 rounded-lg overflow-y-auto h-96 mb-4 shadow-lg">
+    <!-- Chat messages will appear here -->
+  </div>
+
+  <form id="chat-form" class="w-full max-w-lg flex gap-2">
+    <input id="user-input" type="text" placeholder="Ask me anything..." class="flex-grow p-2 rounded text-black" required />
+    <button type="submit" class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">Send</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+
+    function addMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'mb-2';
+      msg.innerHTML = `<strong class="${sender === 'Bot' ? 'text-blue-400' : 'text-pink-400'}">${sender}:</strong> ${text}`;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = input.value;
+      addMessage('You', message);
+      input.value = '';
+
+      const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: "user123", message: message })
+      });
+
+      const data = await response.json();
+      data.forEach((msg) => {
+        addMessage('Bot', msg.text || '[No reply]');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+version: "3.1"
+
+intents:
+  - ask_bull_market
+  - ask_bear_market
+  - ask_crypto
+  - ask_trading_basics
+  - ask_trading_advice
+  - ask_stock_price
+  - ask_trading_help
+  - goodbye
+  - bot_challenge
+  - greet
+  - mood_great
+  - mood_unhappy
+  - deny
+  - affirm
+  
+entities:
+  - stock_symbol
+  - market_trend
+  - crypto_type
+  - slang_term
+
+slots:
+  stock_price:
+    type: float
+    mappings:
+      - type: from_entity
+        entity: stock_symbol
+        role: stock_symbol
+      - type: from_intent
+        intent: ask_stock_price
+        value: 1000  
+  market_trend:
+    type: categorical
+    values:
+      - bull
+      - bear
+    mappings:
+      - type: from_entity
+        entity: market_trend
+        role: market_trend
+      - type: from_intent
+        intent: ask_bull_market
+        value: bull
+      - type: from_intent
+        intent: ask_bear_market
+        value: bear
+
+responses:
+  utter_bull_market:
+    - text: "A bull market refers to a market that is rising or expected to rise."
+  utter_bear_market:
+    - text: "A bear market refers to a market in which prices are falling or expected to fall."
+  utter_crypto:
+    - text: "Cryptocurrency is a type of digital or virtual currency that uses cryptography for security."
+  utter_trading_basics:
+    - text: "Trading involves buying and selling assets like stocks, bonds, or commodities."
+  utter_trading_advice:
+    - text: "It's important to start with small trades, diversify your portfolio, and always do your research before investing."
+  utter_trading_help:
+    - text: "I can help you with tips on trading, answering market-related questions, or providing current stock prices."
+  utter_goodbye:
+    - text: "Goodbye! Feel free to reach out if you need more help."
+  utter_bot_challenge:
+    - text: "Challenge accepted! How can I assist you further?"
+  utter_affirmation:
+    - text: "Great! I'm glad to hear that."
+  utter_denial:
+    - text: "I understand. If you have any other questions, feel free to ask."
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+  utter_mood_great:
+    - text: "I'm glad to hear you're feeling great! How can I assist you today?"
+  utter_mood_unhappy:
+    - text: "I'm sorry to hear that you're not feeling well. How can I help you today?"
+ 
+actions:
+  - action_get_stock_price
+  - action_hodl
+  
+  
+

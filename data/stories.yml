@@ -1,0 +1,68 @@
+version: "3.1"
+
+stories:
+  - story: User asks about the bull market
+    steps:
+      - intent: ask_bull_market
+      - action: utter_bull_market
+
+  - story: User asks about the bear market
+    steps:
+      - intent: ask_bear_market
+      - action: utter_bear_market
+
+  - story: User asks about cryptocurrency
+    steps:
+      - intent: ask_crypto
+      - action: utter_crypto
+
+  - story: User asks for trading basics
+    steps:
+      - intent: ask_trading_basics
+      - action: utter_trading_basics
+
+  - story: User asks for trading advice
+    steps:
+      - intent: ask_trading_advice
+      - action: utter_trading_advice
+
+  - story: User asks about stock price
+    steps:
+      - intent: ask_stock_price
+      - action: action_get_stock_price
+
+  - story: User asks for trading help
+    steps:
+      - intent: ask_trading_help
+      - action: utter_trading_help
+
+  - story: User says goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - story: User challenges the bot
+    steps:
+      - intent: bot_challenge
+      - action: utter_bot_challenge
+  - story: User affirms the bot's response
+    steps:
+      - intent: affirm
+      - action: utter_affirmation
+  - story: User denies the bot's response
+    steps:
+      - intent: deny
+      - action: utter_denial
+  - story: User greets the bot
+    steps:
+      - intent: greet
+      - action: utter_greet
+  - story: User expresses great mood
+    steps:
+      - intent: mood_great
+      - action: utter_mood_great
+  - story: User expresses unhappy mood
+    steps:
+      - intent: mood_unhappy
+      - action: utter_mood_unhappy
+  

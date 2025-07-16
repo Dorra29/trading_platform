@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulation | TradeTuniZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-950 text-white font-sans">
+
+  <header class="p-6 bg-gradient-to-r from-indigo-900 via-purple-700 to-pink-500 flex justify-between items-center">
+    <h1 class="text-3xl font-bold">📈 Trade Simulator</h1>
+    <a href="{% url 'dashboard' %}" class="text-sm bg-gray-800 px-4 py-2 rounded-lg hover:bg-pink-600">← Back to Dashboard</a>
+  </header>
+
+  <main class="p-8 max-w-7xl mx-auto space-y-10">
+    <!-- Simulate Trade -->
+    <div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-pink-400">💸 Make a Virtual Trade</h2>
+      <form method="post" action="{% url 'simulator' %}" class="grid md:grid-cols-4 gap-4">
+        {% csrf_token %}
+        <input type="text" name="asset" placeholder="Asset (e.g. BTC)" required class="p-2 rounded-lg text-black">
+        <select name="side" class="p-2 rounded-lg text-black">
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+        </select>
+        <input type="number" name="amount" placeholder="Amount" step="any" required class="p-2 rounded-lg text-black">
+        <button type="submit" class="bg-gradient-to-r from-pink-500 to-indigo-600 text-white font-bold rounded-lg px-4 py-2 hover:scale-105 transition">Simulate</button>
+      </form>
+    </div>
+    <!-- Chart Section -->
+<div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+  <h2 class="text-xl font-bold mb-4 text-blue-400">📊 Asset Price Movement</h2>
+
+  <!-- Asset selector -->
+  <div class="mb-4">
+    <label for="asset-select" class="block text-sm text-pink-300 mb-2">Select Asset:</label>
+    <select id="asset-select" class="text-black p-2 rounded-lg w-60">
+      <option value="BTC/USD">Bitcoin (BTC)</option>
+      <option value="ETH/USD">Ethereum (ETH)</option>
+      <option value="AAPL">Apple (AAPL)</option>
+      <option value="TSLA">Tesla (TSLA)</option>
+      <option value="MSFT">Microsoft (MSFT)</option>
+    </select>
+  </div>
+
+  <canvas id="priceChart" height="100"></canvas>
+</div>
+
+    <!-- Chart Section -->
+    <div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-blue-400">📊 Asset Price Movement</h2>
+      <canvas id="priceChart" height="100"></canvas>
+    </div>
+
+    <!-- News Section -->
+    <div class="glass p-6 rounded-xl bg-gray-900 shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-fuchsia-400">📰 Real-Time News</h2>
+      <ul id="news-list" class="space-y-3 text-sm text-gray-300">
+        <li>Loading latest financial news...</li>
+      </ul>
+    </div>
+  </main>
+  <footer class="text-xs text-pink-300 text-center py-4 animate-pulse">© 2025 TradeTuniZ — Rule the charts 🦅</footer>
+
+  <script>
+    // Fetch chart data
+    async function fetchStockData(symbol) {
+      const apiKey = '7f6144de083b407b990bc7f6effcbda7'; // Replace with your API key
+      const url = `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&apikey=${apiKey}&outputsize=30`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+  
+    // Update Chart
+    async function updateChart() {
+      try {
+        const data = await fetchStockData('BTC/USD');
+        if (!data.values) {
+          throw new Error("No data returned");
+        }
+  
+        const labels = data.values.map(d => d.datetime);
+        const prices = data.values.map(d => d.close);
+  
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels.reverse(),
+            datasets: [{
+              label: 'BTC Price (USD)',
+              data: prices.reverse(),
+              borderColor: '#ec4899',
+              backgroundColor: 'rgba(236, 72, 153, 0.2)',
+              tension: 0.4,
+              fill: true,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#ccc' } },
+              y: { ticks: { color: '#ccc' } }
+            },
+            plugins: {
+              legend: { labels: { color: '#ccc' } }
+            }
+          }
+        });
+      } catch (error) {
+        console.error("Chart fetch error:", error);
+      }
+    }
+  
+    // Fetch Financial News
+    async function fetchFinancialNews() {
+      const apiKey = "7f6144de083b407b990bc7f6effcbda7"; // Replace with your real API key
+      const url = `https://newsdata.io/api/1/news?apikey=${apiKey}&q=stock OR crypto OR bitcoin&language=en&category=business`;
+  
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const newsList = document.getElementById("news-list");
+        newsList.innerHTML = "";
+  
+        if (data.results && data.results.length > 0) {
+          data.results.slice(0, 5).forEach((article) => {
+            const li = document.createElement("li");
+            li.innerHTML = `🔹 <a href="${article.link}" target="_blank" class="hover:underline text-pink-300 font-semibold">${article.title}</a>`;
+            newsList.appendChild(li);
+          });
+        } else {
+          newsList.innerHTML = "<li>No news available at the moment.</li>";
+        }
+      } catch (error) {
+        console.error("News fetch error:", error);
+        document.getElementById("news-list").innerHTML = "<li>❌ Failed to load news.</li>";
+      }
+    }
+  
+    // ✅ Proper onload handling
+    document.addEventListener("DOMContentLoaded", () => {
+      updateChart();
+      fetchFinancialNews();
+      setInterval(fetchFinancialNews, 60000); // Refresh every 60 seconds
+    });
+  </script>
+  <script>
+    let currentChart = null;
+  
+    async function fetchStockData(symbol) {
+      const apiKey = '7f6144de083b407b990bc7f6effcbda7';
+      const url = `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&apikey=${apiKey}&outputsize=30`;
+  
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+  
+    async function updateChart(symbol = 'BTC/USD') {
+      try {
+        const data = await fetchStockData(symbol);
+        if (!data.values) {
+          throw new Error('No data returned');
+        }
+  
+        const labels = data.values.map(d => d.datetime).reverse();
+        const prices = data.values.map(d => d.close).reverse();
+  
+        const ctx = document.getElementById('priceChart').getContext('2d');
+  
+        // Destroy old chart if exists
+        if (currentChart) {
+          currentChart.destroy();
+        }
+  
+        // Create new chart
+        currentChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: `${symbol} Price`,
+              data: prices,
+              borderColor: '#ec4899',
+              backgroundColor: 'rgba(236, 72, 153, 0.2)',
+              tension: 0.4,
+              fill: true,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#ccc' } },
+              y: { ticks: { color: '#ccc' } }
+            },
+            plugins: {
+              legend: { labels: { color: '#ccc' } }
+            }
+          }
+        });
+      } catch (error) {
+        console.error("Chart update failed:", error);
+        document.getElementById('priceChart').outerHTML = "<p class='text-red-400'>⚠️ Unable to load chart. Please try again later.</p>";
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      const selector = document.getElementById("asset-select");
+  
+      // Initial load
+      updateChart(selector.value);
+  
+      // On change, update chart
+      selector.addEventListener("change", () => {
+        updateChart(selector.value);
+      });
+  
+      fetchFinancialNews(); // Assuming you have this elsewhere
+      setInterval(fetchFinancialNews, 60000);
+    });
+  </script>
+  
+  
+</body>
+</html>

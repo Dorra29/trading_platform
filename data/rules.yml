@@ -1,0 +1,68 @@
+version: "3.1"
+
+rules:
+  - rule: Respond to bull market question
+    steps:
+      - intent: ask_bull_market
+      - action: utter_bull_market
+
+  - rule: Respond to bear market question
+    steps:
+      - intent: ask_bear_market
+      - action: utter_bear_market
+
+  - rule: Respond to crypto question
+    steps:
+      - intent: ask_crypto
+      - action: utter_crypto
+
+  - rule: Respond to trading basics question
+    steps:
+      - intent: ask_trading_basics
+      - action: utter_trading_basics
+
+  - rule: Respond to trading advice question
+    steps:
+      - intent: ask_trading_advice
+      - action: utter_trading_advice
+
+  - rule: Respond to stock price question
+    steps:
+      - intent: ask_stock_price
+      - action: action_get_stock_price
+
+  - rule: Respond to trading help question
+    steps:
+      - intent: ask_trading_help
+      - action: utter_trading_help
+
+  - rule: Respond to goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Respond to bot challenge
+    steps:
+      - intent: bot_challenge
+      - action: utter_bot_challenge
+  - rule: affirmation response
+    steps:
+      - intent: affirm
+      - action: utter_affirmation
+  - rule: denial response
+    steps:
+      - intent: deny
+      - action: utter_denial
+  - rule: greet response
+    steps:
+      - intent: greet 
+      - action: utter_greet 
+  - rule: great mood response
+    steps:
+      - intent: mood_great
+      - action: utter_mood_great
+  - rule: unhappy mood reponse
+    steps:
+      - intent: mood_unhappy
+      - action: utter_mood_unhappy
+ 

@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | TradeTuniZ</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;400&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #18181b 0%, #3b0764 100%); min-height: 100vh;}
+    .glass { background: rgba(40,40,60,0.7); box-shadow: 0 8px 32px 0 rgba(31,38,135,.37); backdrop-filter: blur(8px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.18);}
+    .shimmer { position: relative; overflow: hidden;}
+    .shimmer::after {content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.6) 50%,rgba(255,255,255,0) 100%); animation: shimmer 2s infinite;}
+    @keyframes shimmer {100% { left: 125%; } }
+    .vibe-animate:hover { animation: wiggle 0.4s;}
+    @keyframes wiggle {0% { transform: rotate(-2deg) scale(1.02);} 50% { transform: rotate(2deg) scale(1.06);} 100% { transform: rotate(-1deg) scale(1.02);} }
+  </style>
+</head>
+<body class="text-white font-sans">
+  <header class="p-6 bg-gradient-to-r from-purple-900 via-fuchsia-700 to-pink-500 shadow-lg flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-extrabold flex items-center gap-3">🚀 TradeZ <span class="animate-bounce">🦅</span></h1>
+      <p class="text-m text-fuchsia-200 italic">Welcome to your Dashboard</p>
+    </div>
+    <div>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="ml-4 bg-pink-600 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl transition-all duration-300">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <section class="p-10 flex flex-col items-center">
+    <div class="glass p-8 max-w-2xl w-full mb-8">
+      <h2 class="text-2xl font-bold mb-4 text-center">Hey, {{ user.username|capfirst }}! 👋</h2>
+      <p class="text-fuchsia-200 mb-4 text-lg text-center">
+        Welcome to your personalized trading space.<br>
+        <span class="text-blue-300">Simulate trades, chat with your AI assistant, and flex your trading skills!</span>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+      <!-- Chatbot Section -->
+      <div class="glass p-6 rounded-xl">
+        <h3 class="text-xl font-bold mb-3 flex items-center gap-2">🤖 Your AI Trading Chatbot</h3>
+      
+        <!-- Personality Selector -->
+        <form method="post" action="{% url 'chatbot' %}">
+          {% csrf_token %}
+          <div class="flex flex-col md:flex-row items-stretch gap-2 mb-3">
+            <input type="text" name="message" placeholder="Ask me anything about trading..." class="p-2 rounded-lg text-black w-full focus:ring-2 focus:ring-pink-500 transition-all" required>
+      
+            <select name="personality" class="p-2 rounded-lg text-black w-full md:w-48 focus:ring-2 focus:ring-pink-500">
+              <option value="gen_z" {% if selected_personality == "gen_z" %}selected{% endif %}>🧢 Gen Z Vibes</option>
+              <option value="coach" {% if selected_personality == "coach" %}selected{% endif %}>📢 Coach Mode</option>
+              <option value="nerd" {% if selected_personality == "nerd" %}selected{% endif %}>🧠 Nerdy Analyst</option>
+            </select>
+      
+            <button type="submit" class="shimmer vibe-animate bg-gradient-to-r from-pink-500 to-blue-500 px-4 py-2 rounded-xl font-bold hover:from-blue-600 hover:to-pink-500 text-white shadow-lg transition-all duration-300">
+              Send
+            </button>
+          </div>
+        </form>
+      
+        <!-- Chat History -->
+        <div class="bg-gray-900 rounded-lg p-4 h-40 overflow-y-auto mb-2">
+          {% if chat_history %}
+            {% for entry in chat_history %}
+              <div class="mb-2">
+                <span class="font-bold text-pink-400">You:</span> {{ entry.user_message }}<br>
+                <span class="font-bold text-blue-400">Bot ({{ entry.personality|capfirst }}):</span> {{ entry.bot_reply }}
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-fuchsia-400 text-sm">Start chatting with your AI trading buddy!</p>
+          {% endif %}
+        </div>
+      
+        <!-- Link to Full Chatbot Page -->
+        <div class="mt-4 text-right">
+          <a href="{% url 'chatbot' %}" target="_blank" class="text-sm text-blue-400 hover:underline">
+            🔗 Go to full chatbot experience
+          </a>
+          
+        </div>
+      </div>      
+
+      <!-- Trading Simulator Section -->
+<div class="glass p-6 rounded-xl">
+  <h3 class="text-xl font-bold mb-3 flex items-center gap-2">💸 Trading Simulator</h3>
+  <p class="text-pink-300 mb-2">Practice trading with virtual money and see how you perform!</p>
+  <div class="mb-3">
+    <form method="post" action="{% url 'simulator' %}">
+      {% csrf_token %}
+      <div class="flex flex-col md:flex-row gap-2">
+        <select type="text" name="asset" placeholder="Asset (e.g. BTC, TSLA)" class="p-2 rounded-lg text-black w-full" required>
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
+          <option value="Tesla">Tesla</option>
+          <option value="sell">Sell</option>
+        </select>
+        <select name="side" class="p-2 rounded-lg text-black w-full md:w-32">
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+        </select>
+        <input type="number" step="any" name="amount" placeholder="Amount" class="p-2 rounded-lg text-black w-full" required>
+        <button type="submit" class="shimmer vibe-animate bg-gradient-to-r from-blue-500 to-pink-500 px-4 py-2 rounded-xl font-bold hover:from-pink-600 hover:to-blue-500 text-white shadow-lg transition-all duration-300">Simulate</button>
+      </div>
+    </form>
+  </div>
+  <div class="bg-gray-900 rounded-lg p-4 h-40 overflow-y-auto mb-2">
+    {% if trade_history %}
+      <table class="w-full text-xs text-left">
+        <thead>
+          <tr>
+            <th class="text-fuchsia-400">Asset</th>
+            <th class="text-fuchsia-400">Side</th>
+            <th class="text-fuchsia-400">Amount</th>
+            <th class="text-fuchsia-400">Price</th>
+            <th class="text-fuchsia-400">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for trade in trade_history %}
+            <tr>
+              <td>{{ trade.asset }}</td>
+              <td>{{ trade.side|capfirst }}</td>
+              <td>{{ trade.amount }}</td>
+              <td>{{ trade.price }}</td>
+              <td>{{ trade.created_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="text-fuchsia-400 text-sm">No simulated trades yet. Try one above!</p>
+    {% endif %}
+  </div>
+  <div class="mt-2 text-blue-300 text-xs">
+    <span>Virtual Balance:</span> <span class="font-bold">{{ virtual_balance }}</span>
+  </div>
+
+  <div class="mt-4 text-right">
+    <a href="{% url 'simulator' %}" target="_blank" class="text-sm text-blue-400 hover:underline">
+        🔗 Go to full simulator chart experience
+    </a>
+
+</div>
+</div>      
+</div>
+
+
+  <footer class="p-6 text-center text-fuchsia-400 backdrop-blur-2xl">
+    © 2025 TradeZ. Made with <span class="animate-pulse">❤️</span> in Tunisia.<br>
+    <span class="text-xs">Keep practicing. Gen Z will rule the markets! 🦅</span>
+  </footer>
+</body>
+</html>

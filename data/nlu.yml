@@ -1,0 +1,115 @@
+version: "3.1"
+
+nlu:
+  - intent: ask_bull_market
+    examples: |
+        - What is a bull market?
+        - Tell me about bull markets.
+        - What does a bull market mean?
+        - Explain a bull market.
+        - How do you define a bull market?
+
+  - intent: ask_bear_market
+    examples: |
+        - What is a bear market?
+        - Tell me about bear markets.
+        - What does a bear market mean?
+        - Explain a bear market.
+        - How do you define a bear market?
+
+  - intent: ask_crypto
+    examples: |
+        - What is cryptocurrency?
+        - Tell me about crypto.
+        - Explain cryptocurrency.
+        - What are cryptocurrencies?
+        - How does cryptocurrency work?
+
+  - intent: ask_trading_basics
+    examples: |
+        - What is trading?
+        - Tell me about trading basics.
+        - What are the basics of trading?
+        - How do I get started with trading?
+        - Explain the basics of trading.
+
+  - intent: ask_trading_advice
+    examples: |
+        - What advice do you have for trading?
+        - Can you give me trading tips?
+        - How should I trade in the market?
+        - Any advice for someone new to trading?
+        - What is your advice for beginners in trading?
+
+  - intent: ask_stock_price
+    examples: |
+        - What is the price of stock XYZ?
+        - How much is the stock price of XYZ?
+        - Tell me the current price of XYZ stock.
+        - What is the latest price for stock XYZ?
+        - What is the stock price for XYZ right now?
+
+  - intent: ask_trading_help
+    examples: |
+        - I need help with trading.
+        - Can you help me with trading?
+        - How can I improve my trading skills?
+        - I'm struggling with trading, help me.
+        - Can you provide trading support?
+
+  - intent: goodbye
+    examples: |
+        - Goodbye
+        - See you later
+        - Talk to you later
+        - Bye
+        - I have to go now
+
+  - intent: bot_challenge
+    examples: |
+        - Are you a bot?
+        - Are you human or bot?
+        - Can you prove you're a bot?
+        - How can I know you're a bot?
+        - What is the bot challenge?
+
+  - intent: greet
+    examples: |
+        - Hello
+        - Hi
+        - Hey
+        - Greetings
+        - How are you?
+
+  - intent: mood_great
+    examples: |
+        - I'm feeling great
+        - I'm doing awesome
+        - Everything is great
+        - I'm feeling fantastic
+        - I'm doing well
+
+  - intent: mood_unhappy
+    examples: |
+        - I'm feeling down
+        - I'm not doing well
+        - I feel bad
+        - I'm feeling unhappy
+        - Things aren't going well
+
+  - intent: deny
+    examples: |
+        - No
+        - I don't want that
+        - I'm not interested
+        - That's not it
+        - I don't agree
+
+  - intent: affirm
+    examples: |
+        - Yes
+        - Absolutely
+        - I agree
+        - That's correct
+        - Definitely
+  
